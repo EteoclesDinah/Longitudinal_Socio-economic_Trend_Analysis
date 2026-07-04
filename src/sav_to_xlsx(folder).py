@@ -6,11 +6,11 @@ from pathlib import Path
 script_dir = Path(__file__).resolve().parent
 
 # folder containing all the sav files 
-input_folder = script_dir.parent / "data" / "raw" / "Household Recode files (SAV)"
+input_folder = script_dir.parent / "data" / "raw" / "Household Member Recode files (SAV)"
 
 # output folder
-data_output = script_dir.parent / "data" / "raw" / "Household Recode files (xlsx)" / "DataView"
-var_output = script_dir.parent / "data" / "raw" / "Household Recode files (xlsx)" / "VariableView"
+data_output = script_dir.parent / "data" / "raw" / "Household Member Recode files (xlsx)" / "DataView"
+var_output = script_dir.parent / "data" / "raw" / "Household Member Recode files (xlsx)" / "VariableView"
 
 # look for the folder or make one if it doesn't
 data_output.mkdir(parents=True, exist_ok=True)
@@ -78,7 +78,7 @@ for sav_file in sav_files:
             "Name": var,
             "Type": var_type,
             "Width": width,
-            "Decimals": "",
+            "Decimals": decimals,
             "Label": label,
             "Values": values,
             "Missing": missing,
@@ -91,8 +91,8 @@ for sav_file in sav_files:
     variable_view = pd.DataFrame(rows)
 
     var_excel_file = var_output / f"{sav_file.stem}_VariableView.xlsx"
-    df.to_excel(var_excel_file, index=False)
+    variable_view.to_excel(var_excel_file, index=False)
 
-    print(f"Variable View Excel saved.")
+print("Variable View Excel saved.")
 
 print("\n All SAV files have been converted succressfully")
