@@ -91,12 +91,33 @@ if all_filtered:
 
 else:
     print("No matching variables were found.")
+
+# Create availability matrix
+matrix = combined.pivot_table(
+    index="Label",
+    columns="Survey",
+    values="Name",
+    aggfunc="first"
+)
+
+# Replace missing values with "-"
+matrix = matrix.fillna("-")
+
+# Make "Label" a normal column again
+matrix.reset_index(inplace=True)
+
+# Optional: Sort alphabetically by Label
+matrix = matrix.sort_values(by="Label")
+
+# Save
+matrix_output = output / "Variable_Availability_Matrix.xlsx"
+
+matrix.to_excel(matrix_output, index=False)
+
+print(f"Saved: {matrix_output.name}")
     
 print("Finished")
 
 
 
 
-
-
-    
