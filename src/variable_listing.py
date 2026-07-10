@@ -47,6 +47,9 @@ files = [
 if not files:
     print(f"No .xlsx files found in: {input_folder}")
 
+# Store all filtered dataframes
+all_filtered = []
+
 for file in files:
     df = pd.read_excel(file)
 
@@ -59,6 +62,9 @@ for file in files:
 
     filtered.insert(0, "Survey", Path(file).stem)
 
+    # Add to combined list
+    all_filtered.append(filtered)
+
     # save a filtered variable view
     output_file = os.path.join(
         output,
@@ -68,6 +74,23 @@ for file in files:
     filtered.to_excel(output_file, index=False)
 
     print(f"Saved: {os.path.basename(output_file)}")
+
+# Combine all surveys into one Excel file
+if all_filtered:
+
+    combined = pd.concat(all_filtered, ignore_index=True)
+
+    # Sort alphabetically by Label
+    combined = combined.sort_values(by="Label", ignore_index=True)
+
+    combined_output = output / "Combined_Selected_Variables.xlsx"
+
+    combined.to_excel(combined_output, index=False)
+
+    print(f"Combined file saved: {combined_output.name}")
+
+else:
+    print("No matching variables were found.")
     
 print("Finished")
 
